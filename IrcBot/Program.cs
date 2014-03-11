@@ -1,5 +1,4 @@
-﻿// HACK: Everything about this.
-using System;
+﻿using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +19,8 @@ namespace IrcBot
         static IrcClient i = new IrcClient();
         // Plugin information
         static List<IPlugin> plugins = new List<IPlugin>();
-        static List<string> pluginsByName = new List<string>(); // plugin names, as checking typenames would be expensive
+	// HACK: Visual Studio cruft creates multiple builds of the plugin, resulting in multiple loads
+        static List<string> pluginsByName = new List<string>();
 
         static void Main(string[] args)
         {
@@ -38,7 +38,7 @@ namespace IrcBot
                         // see if they're a valid plugin
                         if (t.GetInterface("IPlugin").IsEquivalentTo(typeof(IPlugin)))
                         {
-                            // ok, i guess so - did we load it already? (this is because of general VS cruft it leaves)
+                            // ok, i guess so - did we load it already?
                             if (pluginsByName.Contains(t.Name)) continue;
                             // add plugin
                             pluginsByName.Add(t.Name);
@@ -49,15 +49,15 @@ namespace IrcBot
                 }
                 catch (InvalidCastException e)
                 {
-                    //Debug.Write(e.ToString(), "PluginLoading");
+                    Debug.Write(e.ToString(), "PluginLoading");
                 }
                 catch (ReflectionTypeLoadException e)
                 {
-                    //Debug.Write(e.ToString(), "PluginLoading");
+                    Debug.Write(e.ToString(), "PluginLoading");
                 }
                 catch (NullReferenceException e)
                 {
-                    //Debug.Write(e.ToString(), "PluginLoading");
+                    Debug.Write(e.ToString(), "PluginLoading");
                 }
             }
             // assign events
@@ -124,59 +124,4 @@ namespace IrcBot
             return Assembly.LoadFrom(path);
         }
     }
-
-    /** 
-     * in retrospect this was a bad idea, marked here for my remembering not to do it
-     * example usage: return FunctionHandler.Handler("date", source, message, ref client, (string s, ref IrcClient c) => { return DateTime.UtcNow.ToString() + " (UTC)"; }, (string s, string m, ref IrcClient c) => { try { return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(m)).ToString(); } catch (TimeZoneNotFoundException e) { return e.Message; } });
-     * yeah...
-    public static class FunctionHandler
-    {
-        /// <summary>
-        /// Represents a function for <see cref="Handler"/> to use.
-        /// </summary>
-        /// <param name="source">The channel or user that the message originated from.</param>
-        /// <param name="message">The message to parse.</param>
-        /// <param name="client">A reference to the IrcClient that can be used to invoke further tasks.</param>
-        /// <returns>A message to send, null if nothing to send.</returns>
-        public delegate string HandlerFuncWithParams(string source, string message, ref IrcClient client);
-        /// <summary>
-        /// Represents a function for <see cref="Handler"/> to use.
-        /// </summary>
-        /// <param name="source">The channel or user that the message originated from.</param>
-        /// <param name="client">A reference to the IrcClient that can be used to invoke further tasks.</param>
-        /// <returns>A message to send, null if nothing to send.</returns>
-        public delegate string HandlerFunc(string source, ref IrcClient client);
-
-        /// <summary>
-        /// Parses a message and executes a function depending on if it has parameters or not, and returns null if there was no function anyways.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="source"></param>
-        /// <param name="message"></param>
-        /// <param name="client"></param>
-        /// <param name="noParams"></param>
-        /// <param name="withParams"></param>
-        /// <returns></returns>
-        public static string Handler(string name, string source, string message, ref IrcClient client, HandlerFunc noParams, HandlerFuncWithParams withParams)
-        {
-            if (("." + name) == message)
-            {
-                return noParams(source, ref client);
-            }
-            if (message.StartsWith("." + name))
-            {
-                return withParams(source, message.Remove(0, ("." + name).Length), ref client);
-            }
-            return null;
-        }
-
-        public static string Handler(string name, string source, string message, ref IrcClient client, HandlerFunc noParams)
-        {
-            if (("." + name) == message)
-            {
-                return noParams(source, ref client);
-            }
-            return null;
-        }
-    } **/
 }
