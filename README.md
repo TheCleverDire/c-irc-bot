@@ -14,7 +14,7 @@ The method instance to use is:
 
 `source` indicates the channel or user (in case of private message) that the message originated from, `message` indicates the message, and `client` is a reference to the bot's instance of IrcClient, which can be used for commands. The return value is what to send back to the source.
 
-Best practices when making your plugin is to use "." as a prefix for commands, and not to use `client.SendMessage`, as it will send to the source..
+Best practices when making your plugin is to use "." as a prefix for commands, and not to use `client.SendMessage`, as it will send to the source what you return. (if not null)
 
 ### Building a module
 
