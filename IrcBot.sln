@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Windows Desktop
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrcBot", "IrcBot\IrcBot.csproj", "{91060349-1648-41BB-BCEF-0D6473E67438}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrcBot.Title", "IrcBot.Title\IrcBot.Title.csproj", "{5EB8E03B-0B8E-4632-8D73-E75A9D14C232}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrcBot.Utils", "IrcBot.Utils\IrcBot.Utils.csproj", "{61B8257D-FD81-489F-B3C4-CC6E5693B980}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91060349-1648-41BB-BCEF-0D6473E67438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91060349-1648-41BB-BCEF-0D6473E67438}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91060349-1648-41BB-BCEF-0D6473E67438}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91060349-1648-41BB-BCEF-0D6473E67438}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EB8E03B-0B8E-4632-8D73-E75A9D14C232}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EB8E03B-0B8E-4632-8D73-E75A9D14C232}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EB8E03B-0B8E-4632-8D73-E75A9D14C232}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EB8E03B-0B8E-4632-8D73-E75A9D14C232}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61B8257D-FD81-489F-B3C4-CC6E5693B980}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61B8257D-FD81-489F-B3C4-CC6E5693B980}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61B8257D-FD81-489F-B3C4-CC6E5693B980}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61B8257D-FD81-489F-B3C4-CC6E5693B980}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
