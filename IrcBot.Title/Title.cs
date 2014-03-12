@@ -32,6 +32,7 @@ namespace IrcBot.Title
                 try
                 {
                     using (WebResponse wrr = wr.GetResponse()) {
+                        Debug.WriteLine("Found type " + wrr.ContentType, "TitlePlugin");
                         type = wrr.ContentType;
                     }
                     // TODO: Support a whole bunch of wacky shit. img2aa anyone?
@@ -48,7 +49,7 @@ namespace IrcBot.Title
                     return null; // we failed
                 }
             }
-            return String.IsNullOrEmpty(toSend) ? toSend : null;
+            return !String.IsNullOrEmpty(toSend) ? toSend : null;
         }
 
         /// <summary>
@@ -59,8 +60,21 @@ namespace IrcBot.Title
         static string GetHTMLGist(string url)
         {
             HtmlDocument hd = new HtmlDocument();
-            hd.LoadHtml(new WebClient().DownloadString(url));
-            return hd.DocumentNode.SelectSingleNode("/html/head/title").InnerText ?? null;
+            using (WebClient wc = new WebClient())
+            {
+                hd.LoadHtml(wc.DownloadString(url));
+            }
+            try
+            {
+                string title = hd.DocumentNode.SelectSingleNode("//title").InnerText;
+                Debug.WriteLine("Title is " + title, "TitlePlugin");
+                return title;
+            }
+            catch (NullReferenceException e)
+            {
+                Debug.WriteLine(e.ToString(), "TitlePlugin");
+                return null;
+            }
         }
     }
 }
