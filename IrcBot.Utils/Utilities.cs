@@ -91,11 +91,9 @@ namespace IrcBot.Utils
         {
             if (message.StartsWith(".whois "))
             {
-                //return client.GetIrcUser(message.Remove(0, ".whois ".Length)).ToString();
                 client.RfcWhois(message.Remove(0, ".whois ".Length));
-
                 IrcUser u = client.GetIrcUser(message.Remove(0, ".whois ".Length));
-                return u.ToString();
+                return String.Format("{0}!{1}@{2}, Away: {3}, Oper: {4}, Realname: {5}", u.Nick, u.Ident, u.Host, u.IsAway, u.IsIrcOp, u.Realname);
             }
             return null;
         }
@@ -106,12 +104,20 @@ namespace IrcBot.Utils
     /// </summary>
     public class AppendTopic : IPlugin
     {
+        const string Seperator = " | ";
+
         string IPlugin.Invoke(string source, string message, ref IrcClient client)
         {
-            if (message.StartsWith(".appendtopic"))
+            if (message.StartsWith(".appendtopic ") & source.StartsWith("#"))
             {
-                Debug.WriteLine(client.GetChannel(source).Topic);
-                return client.GetChannel(source).Topic;
+                string topic = client.GetChannel(source).Topic;
+                string addition = message.Remove(0, ".appendtopic ".Length);
+                if (String.IsNullOrWhiteSpace(topic))
+                {
+                    client.RfcTopic(source, addition);
+                    return null;
+                }
+                client.RfcTopic(source, topic + Seperator + addition);
             }
             return null; // we have no need to talk
         }
