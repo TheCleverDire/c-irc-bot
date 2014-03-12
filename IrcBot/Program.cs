@@ -122,7 +122,7 @@ namespace IrcBot
     }
 
     /// <summary>
-    /// Recursively loads an assembly and it's references.
+    /// Recursively loads an assembly and its references.
     /// </summary>
     /// <see cref="http://stackoverflow.com/a/3059289"/>
     public class RecursiveAssemblyLoader : MarshalByRefObject
