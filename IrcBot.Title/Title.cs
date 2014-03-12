@@ -48,7 +48,7 @@ namespace IrcBot.Title
                     return null; // we failed
                 }
             }
-            return toSend != "" ? toSend : null;
+            return String.IsNullOrEmpty(toSend) ? toSend : null;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace IrcBot.Title
         {
             HtmlDocument hd = new HtmlDocument();
             hd.LoadHtml(new WebClient().DownloadString(url));
-            return hd.DocumentNode.SelectSingleNode("/html/head/title").InnerText;
+            return hd.DocumentNode.SelectSingleNode("/html/head/title").InnerText ?? null;
         }
     }
 }

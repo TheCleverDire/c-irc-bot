@@ -6,6 +6,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Meebey.SmartIrc4net;
+using System.Net;
+using System.Diagnostics;
 
 namespace IrcBot.YouTube
 {
@@ -25,7 +27,15 @@ namespace IrcBot.YouTube
             foreach (Match m in matches)
             {
                 XmlDocument xd = new XmlDocument();
-                xd.Load(YouTubeGdataApiPrefix + m.Groups[1].Value);
+                try
+                {
+                    xd.Load(YouTubeGdataApiPrefix + m.Groups[1].Value);
+                }
+                catch (WebException e)
+                {
+                    Debug.WriteLine(e.ToString(), "TitlePlugin");
+                    return null; // we failed
+                }
                 // Namespace BS
                 XmlNamespaceManager nsmgr = new XmlNamespaceManager(xd.NameTable);
                 nsmgr.AddNamespace("atom", "http://www.w3.org/2005/Atom");
