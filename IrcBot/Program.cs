@@ -75,37 +75,20 @@ namespace IrcBot
 
         static void i_OnQueryMessage(object sender, IrcEventArgs e)
         {
-            // This doesn't matter anyways if it succeeds or not
-            try
-            {
-                foreach (Type p in plugins)
-                {
-                    Thread t = new Thread(() =>
-                    {
-                        // Why not spawn instances when we loaded them? Sometimes state likes to stick or something.
-                        string message = ((IPlugin)Activator.CreateInstance(p)).Invoke(e.Data.Nick, e.Data.Message, ref i);
-                        if (!String.IsNullOrEmpty(message))
-                        {
-                            i.SendMessage(SendType.Message, e.Data.Nick, message);
-                        }
-                    });
-                    t.IsBackground = true;
-                    t.Name = p.Name;
-                    t.Start();
-                    if (!t.Join(5000))
-                    {
-                        t.Abort();
-                        Debug.WriteLine("The plugin took too long to respond.", "PluginLoader");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.ToString());
-            }
+            InvokePlugin(e.Data.Nick, e.Data.Message);
         }
 
         static void i_OnChannelMessage(object sender, IrcEventArgs e)
+        {
+            InvokePlugin(e.Data.Channel, e.Data.Message);
+        }
+
+        /// <summary>
+        /// Invokes a plugin.
+        /// </summary>
+        /// <param name="source">The channel or user that sent the message.</param>
+        /// <param name="message">The message for the plugins to handle.</param>
+        static void InvokePlugin(string source, string message)
         {
             // This doesn't matter anyways if it succeeds or not
             try
@@ -114,10 +97,11 @@ namespace IrcBot
                 {
                     Thread t = new Thread(() =>
                     {
-                        string message = ((IPlugin)Activator.CreateInstance(p)).Invoke(e.Data.From, e.Data.Message, ref i);
+                        // Why not spawn instances when we loaded them? Sometimes state likes to stick or something.
+                        string to_send = ((IPlugin)Activator.CreateInstance(p)).Invoke(source, message, ref i);
                         if (!String.IsNullOrEmpty(message))
                         {
-                            i.SendMessage(SendType.Message, e.Data.Channel, message);
+                            i.SendMessage(SendType.Message, source, to_send);
                         }
                     });
                     t.IsBackground = true;
