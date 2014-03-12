@@ -11,6 +11,7 @@ using System.Xml;
 using System.Reflection;
 using System.Diagnostics;
 using IrcBot.Properties;
+using System.Threading;
 
 namespace IrcBot
 {
@@ -18,8 +19,8 @@ namespace IrcBot
     {
         static IrcClient i = new IrcClient();
         // Plugin information
-        static List<IPlugin> plugins = new List<IPlugin>();
-	// HACK: Visual Studio cruft creates multiple builds of the plugin, resulting in multiple loads
+        static List<Type> plugins = new List<Type>();
+        // HACK: Visual Studio cruft creates multiple builds of the plugin, resulting in multiple loads
         static List<string> pluginsByName = new List<string>();
 
         static void Main(string[] args)
@@ -42,7 +43,7 @@ namespace IrcBot
                             if (pluginsByName.Contains(t.Name)) continue;
                             // add plugin
                             pluginsByName.Add(t.Name);
-                            plugins.Add((IPlugin)Activator.CreateInstance(t));
+                            plugins.Add(t);
                         }
                     }
                     Debug.WriteLine("Loaded " + file, "PluginLoading");
@@ -77,12 +78,24 @@ namespace IrcBot
             // This doesn't matter anyways if it succeeds or not
             try
             {
-                foreach (IPlugin p in plugins)
+                foreach (Type p in plugins)
                 {
-                    string message = p.Invoke(e.Data.Nick, e.Data.Message, ref i);
-                    if (!String.IsNullOrEmpty(message))
+                    Thread t = new Thread(() =>
                     {
-                        i.SendMessage(SendType.Message, e.Data.Nick, message);
+                        // Why not spawn instances when we loaded them? Sometimes state likes to stick or something.
+                        string message = ((IPlugin)Activator.CreateInstance(p)).Invoke(e.Data.Nick, e.Data.Message, ref i);
+                        if (!String.IsNullOrEmpty(message))
+                        {
+                            i.SendMessage(SendType.Message, e.Data.Nick, message);
+                        }
+                    });
+                    t.IsBackground = true;
+                    t.Name = p.Name;
+                    t.Start();
+                    if (!t.Join(5000))
+                    {
+                        t.Abort();
+                        Debug.WriteLine("The plugin took too long to respond.", "PluginLoader");
                     }
                 }
             }
@@ -97,12 +110,23 @@ namespace IrcBot
             // This doesn't matter anyways if it succeeds or not
             try
             {
-                foreach (IPlugin p in plugins)
+                foreach (Type p in plugins)
                 {
-                    string message = p.Invoke(e.Data.From, e.Data.Message, ref i);
-                    if (!String.IsNullOrEmpty(message))
+                    Thread t = new Thread(() =>
                     {
-                        i.SendMessage(SendType.Message, e.Data.Channel, message);
+                        string message = ((IPlugin)Activator.CreateInstance(p)).Invoke(e.Data.From, e.Data.Message, ref i);
+                        if (!String.IsNullOrEmpty(message))
+                        {
+                            i.SendMessage(SendType.Message, e.Data.Channel, message);
+                        }
+                    });
+                    t.IsBackground = true;
+                    t.Name = p.Name;
+                    t.Start();
+                    if (!t.Join(5000))
+                    {
+                        t.Abort();
+                        Debug.WriteLine("The plugin took too long to respond.", "PluginLoader");
                     }
                 }
             }
