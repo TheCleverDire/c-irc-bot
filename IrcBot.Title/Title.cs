@@ -13,13 +13,13 @@ namespace IrcBot.Title
     public class Title : IPlugin
     {
         // THANKS GRUBER
-        static string crazy_regex = @"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'" + "\"" + ".,<>?«»“”‘’]))";
+        const string UrlMatchExpression = @"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'" + "\"" + ".,<>?«»“”‘’]))";
 
         string IPlugin.Invoke(string source, string message, ref IrcClient client)
         {
             string toSend = ""; // Make csc happy
             // catch urls
-            MatchCollection matches = Regex.Matches(message, crazy_regex);
+            MatchCollection matches = Regex.Matches(message, UrlMatchExpression);
             foreach (Match m in matches)
             {
                 if (!(m.Value.StartsWith("http://") || m.Value.StartsWith("https://"))) continue; // boo unprefix
@@ -45,7 +45,6 @@ namespace IrcBot.Title
         /// <returns>The title, maybe other stuff..</returns>
         static string GetHTMLGist(string url)
         {
-            // TODO: Support things like YouTube playback length, etc
             HtmlAgilityPack.HtmlDocument hd = new HtmlAgilityPack.HtmlDocument();
             hd.LoadHtml(new WebClient().DownloadString(url));
             return hd.DocumentNode.SelectSingleNode("/html/head/title").InnerText;
