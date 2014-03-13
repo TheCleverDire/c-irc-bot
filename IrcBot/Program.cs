@@ -26,7 +26,7 @@ namespace IrcBot
             // load plugins
             foreach (string f in Directory.EnumerateFiles(Settings.Default.PluginPath, "IrcBot.*.dll", SearchOption.AllDirectories))
             {
-                Debug.Write("Attempting to load " + f, "PluginLoading");
+                Debug.WriteLine("Attempting to load " + f, "PluginLoading");
                 RecursiveAssemblyLoader r = new RecursiveAssemblyLoader(); // to load plugin deps
                 Assembly file = r.GetAssembly(Path.GetFullPath(f));
                 try
@@ -47,15 +47,15 @@ namespace IrcBot
                 }
                 catch (InvalidCastException e)
                 {
-                    Debug.Write(e.ToString(), "PluginLoading");
+                    Debug.WriteLine(e.ToString(), "PluginLoading");
                 }
                 catch (ReflectionTypeLoadException e)
                 {
-                    Debug.Write(e.ToString(), "PluginLoading");
+                    Debug.WriteLine(e.ToString(), "PluginLoading");
                 }
                 catch (NullReferenceException e)
                 {
-                    Debug.Write(e.ToString(), "PluginLoading");
+                    Debug.WriteLine(e.ToString(), "PluginLoading");
                 }
             }
             // assign events
