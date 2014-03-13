@@ -20,8 +20,6 @@ namespace IrcBot
         static IrcClient i = new IrcClient();
         // Plugin information
         static List<Type> plugins = new List<Type>();
-        // HACK: Visual Studio cruft creates multiple builds of the plugin, resulting in multiple loads
-        static List<string> pluginsByName = new List<string>();
 
         static void Main(string[] args)
         {
@@ -40,9 +38,8 @@ namespace IrcBot
                         if (t.GetInterface("IPlugin").IsEquivalentTo(typeof(IPlugin)))
                         {
                             // ok, i guess so - did we load it already?
-                            if (pluginsByName.Contains(t.Name)) continue;
+                            if (plugins.Contains(t)) continue;
                             // add plugin
-                            pluginsByName.Add(t.Name);
                             plugins.Add(t);
                         }
                     }
