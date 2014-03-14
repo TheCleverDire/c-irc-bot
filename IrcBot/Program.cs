@@ -132,7 +132,7 @@ namespace IrcBot
                     if (!t.Join(5000))
                     {
                         t.Abort();
-                        Debug.WriteLine("The plugin took too long to respond.", "PluginLoader");
+                        Debug.WriteLine(String.Format("The plugin ({0}) took too long to respond for InvokePluginWithMessage.", p.Name), "PluginLoader");
                     }
                 }
             }
@@ -164,7 +164,7 @@ namespace IrcBot
                     if (!t.Join(5000))
                     {
                         t.Abort();
-                        Debug.WriteLine("The plugin took too long to respond.", "PluginLoader");
+                        Debug.WriteLine(String.Format("The plugin ({0}) took too long to respond for InvokePluginWithChannelUserChange.", p.Name), "PluginLoader");
                     }
                 }
             }
