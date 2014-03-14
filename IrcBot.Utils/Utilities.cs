@@ -14,7 +14,7 @@ namespace IrcBot.Utils
     /// </summary>
     public class Ping : IPlugin
     {
-        string IPlugin.Invoke(string source, string message, ref IrcClient client)
+        string IPlugin.InvokeWithMessage(string source, string message, ref IrcClient client)
         {
             return message == ".ping" ? "pong" : null;
         }
@@ -28,7 +28,7 @@ namespace IrcBot.Utils
     /// </remarks>
     public class Date : IPlugin
     {
-        string IPlugin.Invoke(string source, string message, ref IrcClient client)
+        string IPlugin.InvokeWithMessage(string source, string message, ref IrcClient client)
         {
             if (message == ".date")
             {
@@ -55,7 +55,7 @@ namespace IrcBot.Utils
     /// </summary>
     public class Dice : IPlugin
     {
-        string IPlugin.Invoke(string source, string message, ref IrcClient client)
+        string IPlugin.InvokeWithMessage(string source, string message, ref IrcClient client)
         {
             if (message == ".dice")
             {
@@ -75,7 +75,7 @@ namespace IrcBot.Utils
     /// </summary>
     public class Flip : IPlugin
     {
-        string IPlugin.Invoke(string source, string message, ref IrcClient client)
+        string IPlugin.InvokeWithMessage(string source, string message, ref IrcClient client)
         {
             if (message == ".flip" || message == ".coin")
             {
@@ -87,7 +87,7 @@ namespace IrcBot.Utils
 
     public class Whois : IPlugin
     {
-        string IPlugin.Invoke(string source, string message, ref IrcClient client)
+        string IPlugin.InvokeWithMessage(string source, string message, ref IrcClient client)
         {
             if (message.StartsWith(".whois "))
             {
@@ -106,7 +106,7 @@ namespace IrcBot.Utils
     {
         const string Seperator = " | ";
 
-        string IPlugin.Invoke(string source, string message, ref IrcClient client)
+        string IPlugin.InvokeWithMessage(string source, string message, ref IrcClient client)
         {
             if (message.StartsWith(".appendtopic ") & source.StartsWith("#"))
             {

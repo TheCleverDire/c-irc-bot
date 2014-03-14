@@ -20,7 +20,7 @@ namespace IrcBot.YouTube
         const string YouTubeGdataApiPrefix = "https://gdata.youtube.com/feeds/api/videos/";
 
         // We don't need to worry about titles, as the Title plugin does that
-        string IPlugin.Invoke(string source, string message, ref IrcClient client)
+        string IPlugin.InvokeWithMessage(string source, string message, ref IrcClient client)
         {
             string to_send = "";
             MatchCollection matches = Regex.Matches(message, YouTubeLinkRegex);

@@ -34,6 +34,6 @@ namespace IrcBot
         ///     }
         /// }
         /// </example>
-        string Invoke(string source, string message, ref IrcClient client);
+        string InvokeWithMessage(string source, string message, ref IrcClient client);
     }
 }

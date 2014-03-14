@@ -16,7 +16,7 @@ namespace IrcBot.Title
         // THANKS GRUBER
         const string UrlMatchExpression = @"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'" + "\"" + ".,<>?«»“”‘’]))";
 
-        string IPlugin.Invoke(string source, string message, ref IrcClient client)
+        string IPlugin.InvokeWithMessage(string source, string message, ref IrcClient client)
         {
             string toSend = String.Empty; // Make csc happy
             // catch urls

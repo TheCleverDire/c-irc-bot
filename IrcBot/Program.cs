@@ -72,12 +72,12 @@ namespace IrcBot
 
         static void i_OnQueryMessage(object sender, IrcEventArgs e)
         {
-            InvokePlugin(e.Data.Nick, e.Data.Message);
+            InvokePluginWithMessage(e.Data.Nick, e.Data.Message);
         }
 
         static void i_OnChannelMessage(object sender, IrcEventArgs e)
         {
-            InvokePlugin(e.Data.Channel, e.Data.Message);
+            InvokePluginWithMessage(e.Data.Channel, e.Data.Message);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace IrcBot
         /// </summary>
         /// <param name="source">The channel or user that sent the message.</param>
         /// <param name="message">The message for the plugins to handle.</param>
-        static void InvokePlugin(string source, string message)
+        static void InvokePluginWithMessage(string source, string message)
         {
             // This doesn't matter anyways if it succeeds or not
             try
@@ -95,7 +95,7 @@ namespace IrcBot
                     Thread t = new Thread(() =>
                     {
                         // Why not spawn instances when we loaded them? Sometimes state likes to stick or something.
-                        string to_send = ((IPlugin)Activator.CreateInstance(p)).Invoke(source, message, ref i);
+                        string to_send = ((IPlugin)Activator.CreateInstance(p)).InvokeWithMessage(source, message, ref i);
                         if (!String.IsNullOrEmpty(message))
                         {
                             i.SendMessage(SendType.Message, source, to_send);
