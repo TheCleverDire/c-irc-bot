@@ -52,6 +52,11 @@ namespace IrcBot.Title
             return !String.IsNullOrEmpty(toSend) ? toSend : null;
         }
 
+        string IPlugin.InvokeWithChannelUserChange(string channel, string user, string kicker, string message, ChannelUserChange type, ref IrcClient client)
+        {
+            return null; // Not implemented
+        }
+
         /// <summary>
         /// Gets the title and any other interesting doodads of an HTML document.
         /// </summary>

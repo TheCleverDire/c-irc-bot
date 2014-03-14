@@ -61,6 +61,10 @@ namespace IrcBot
             // assign events
             i.OnChannelMessage += i_OnChannelMessage;
             i.OnQueryMessage += i_OnQueryMessage;
+            i.OnJoin += i_OnJoin;
+            i.OnQuit += i_OnQuit;
+            i.OnKick += i_OnKick;
+            i.OnPart += i_OnPart;
             // init
             i.ActiveChannelSyncing = true;
             i.UseSsl = Settings.Default.SSL;
@@ -68,6 +72,27 @@ namespace IrcBot
             i.Login(Settings.Default.Nickname, Settings.Default.RealName);
             i.RfcJoin(Settings.Default.Channels.Cast<string>().ToArray());
             i.Listen();
+        }
+
+        static void i_OnPart(object sender, PartEventArgs e)
+        {
+            InvokePluginWithChannelUserChange(e.Channel, e.Who, null, e.PartMessage, ChannelUserChange.Part);
+        }
+
+        static void i_OnKick(object sender, KickEventArgs e)
+        {
+            // SmartIrc4net documentation is NOT clear on the Who/Whom mixup
+            InvokePluginWithChannelUserChange(e.Channel, e.Whom, e.Who, e.KickReason, ChannelUserChange.Kick);
+        }
+
+        static void i_OnQuit(object sender, QuitEventArgs e)
+        {
+            InvokePluginWithChannelUserChange(null, e.Who, null, e.QuitMessage, ChannelUserChange.Quit);
+        }
+
+        static void i_OnJoin(object sender, JoinEventArgs e)
+        {
+            InvokePluginWithChannelUserChange(e.Channel, e.Who, null, null, ChannelUserChange.Join);
         }
 
         static void i_OnQueryMessage(object sender, IrcEventArgs e)
@@ -81,7 +106,7 @@ namespace IrcBot
         }
 
         /// <summary>
-        /// Invokes a plugin.
+        /// Invokes a plugin with a message.
         /// </summary>
         /// <param name="source">The channel or user that sent the message.</param>
         /// <param name="message">The message for the plugins to handle.</param>
@@ -99,6 +124,38 @@ namespace IrcBot
                         if (!String.IsNullOrEmpty(message))
                         {
                             i.SendMessage(SendType.Message, source, to_send);
+                        }
+                    });
+                    t.IsBackground = true;
+                    t.Name = p.Name;
+                    t.Start();
+                    if (!t.Join(5000))
+                    {
+                        t.Abort();
+                        Debug.WriteLine("The plugin took too long to respond.", "PluginLoader");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+        }
+
+        static void InvokePluginWithChannelUserChange(string channel, string user, string kicker, string message, ChannelUserChange type)
+        {
+            // This doesn't matter anyways if it succeeds or not
+            try
+            {
+                foreach (Type p in plugins)
+                {
+                    Thread t = new Thread(() =>
+                    {
+                        // Why not spawn instances when we loaded them? Sometimes state likes to stick or something.
+                        string to_send = ((IPlugin)Activator.CreateInstance(p)).InvokeWithChannelUserChange(channel, user, kicker, message, type, ref i);
+                        if (!String.IsNullOrEmpty(message))
+                        {
+                            i.SendMessage(SendType.Message, channel, to_send);
                         }
                     });
                     t.IsBackground = true;

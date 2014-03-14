@@ -50,5 +50,10 @@ namespace IrcBot.YouTube
             }
             return to_send;
         }
+
+        string IPlugin.InvokeWithChannelUserChange(string channel, string user, string kicker, string message, ChannelUserChange type, ref IrcClient client)
+        {
+            return null; // Not implemented
+        }
     }
 }

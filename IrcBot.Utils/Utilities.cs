@@ -18,6 +18,11 @@ namespace IrcBot.Utils
         {
             return message == ".ping" ? "pong" : null;
         }
+
+        string IPlugin.InvokeWithChannelUserChange(string channel, string user, string kicker, string message, ChannelUserChange type, ref IrcClient client)
+        {
+            return null; // Not implemented
+        }
     }
 
     /// <summary>
@@ -48,6 +53,11 @@ namespace IrcBot.Utils
 
             return null;
         }
+
+        string IPlugin.InvokeWithChannelUserChange(string channel, string user, string kicker, string message, ChannelUserChange type, ref IrcClient client)
+        {
+            return null; // Not implemented
+        }
     }
 
     /// <summary>
@@ -68,6 +78,11 @@ namespace IrcBot.Utils
 
             return null;
         }
+
+        string IPlugin.InvokeWithChannelUserChange(string channel, string user, string kicker, string message, ChannelUserChange type, ref IrcClient client)
+        {
+            return null; // Not implemented
+        }
     }
 
     /// <summary>
@@ -83,6 +98,11 @@ namespace IrcBot.Utils
             }
             return null;
         }
+
+        string IPlugin.InvokeWithChannelUserChange(string channel, string user, string kicker, string message, ChannelUserChange type, ref IrcClient client)
+        {
+            return null; // Not implemented
+        }
     }
 
     public class Whois : IPlugin
@@ -96,6 +116,11 @@ namespace IrcBot.Utils
                 return String.Format("{0}!{1}@{2}, Away: {3}, Oper: {4}, Realname: {5}", u.Nick, u.Ident, u.Host, u.IsAway, u.IsIrcOp, u.Realname);
             }
             return null;
+        }
+
+        string IPlugin.InvokeWithChannelUserChange(string channel, string user, string kicker, string message, ChannelUserChange type, ref IrcClient client)
+        {
+            return null; // Not implemented
         }
     }
 
@@ -120,6 +145,11 @@ namespace IrcBot.Utils
                 client.RfcTopic(source, topic + Seperator + addition);
             }
             return null; // we have no need to talk
+        }
+
+        string IPlugin.InvokeWithChannelUserChange(string channel, string user, string kicker, string message, ChannelUserChange type, ref IrcClient client)
+        {
+            return null; // Not implemented
         }
     }
 }
