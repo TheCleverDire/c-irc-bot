@@ -63,7 +63,7 @@ namespace IrcBot.Utils
             }
             if (message.StartsWith(".dice "))
             {
-                return new Random().Next(1, Convert.ToInt32(message.Remove(0, ".dice ".Length))).ToString();
+                return new Random().Next(1, Convert.ToInt32(message.Split(' ')[1])).ToString();
             }
 
             return null;
@@ -91,8 +91,8 @@ namespace IrcBot.Utils
         {
             if (message.StartsWith(".whois "))
             {
-                client.RfcWhois(message.Remove(0, ".whois ".Length));
-                IrcUser u = client.GetIrcUser(message.Remove(0, ".whois ".Length));
+                client.RfcWhois(message.Split(' ')[1]);
+                IrcUser u = client.GetIrcUser(message.Split(' ')[1]);
                 return String.Format("{0}!{1}@{2}, Away: {3}, Oper: {4}, Realname: {5}", u.Nick, u.Ident, u.Host, u.IsAway, u.IsIrcOp, u.Realname);
             }
             return null;
@@ -111,7 +111,7 @@ namespace IrcBot.Utils
             if (message.StartsWith(".appendtopic ") & source.StartsWith("#"))
             {
                 string topic = client.GetChannel(source).Topic;
-                string addition = message.Remove(0, ".appendtopic ".Length);
+                string addition = message.Split(' ')[1];
                 if (String.IsNullOrWhiteSpace(topic))
                 {
                     client.RfcTopic(source, addition);

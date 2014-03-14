@@ -13,7 +13,7 @@ namespace IrcBot
     public interface IPlugin
     {
         /// <summary>
-        /// Activates the plugin.
+        /// Activates the plugin with a message to parse.
         /// </summary>
         /// <param name="source">The channel or user that sent the message.</param>
         /// <param name="message">The message to parse.</param>
