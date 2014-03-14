@@ -186,4 +186,56 @@ namespace IrcBot
             return Assembly.LoadFrom(path);
         }
     }
+
+    /// <summary>
+    /// Assorted utility functions, useful for plugins.
+    /// </summary>
+    public static class Utilities
+    {
+        /// <summary>
+        /// Prints an enumerable as a string representation of all the contained items.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="l">The enumerable to print.</param>
+        /// <returns>A string representation of the enumerable.</returns>
+        public static string PrintEnumerable<T>(this IEnumerable<T> l)
+        {
+            string sep = ", ";
+            string printed = String.Empty;
+
+            if (l.Count() != 0)
+            {
+                foreach (var i in l.Take(l.Count() - 1))
+                {
+                    printed += (i.ToString() + sep);
+                }
+                // last item is printed seperately to avoid appending the seperator
+                printed += l.Last().ToString();
+            }
+
+            return printed;
+        }
+
+        /// <summary>
+        /// Prints an enumerable as a string representation of all the contained items.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="l">The enumerable to print.</param>
+        /// <param name="sep">The string seperator to use.</param>
+        /// <returns>A string representation of the enumerable.</returns>
+        public static string PrintEnumerable<T>(this IEnumerable<T> l, string sep)
+        {
+            string printed = String.Empty;
+
+            if (l.Count() != 0)
+            {
+                foreach (var i in l.Take(l.Count()))
+                {
+                    printed += (i.ToString() + sep);
+                }
+            }
+
+            return printed;
+        }
+    }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -145,6 +146,25 @@ namespace IrcBot.Utils
                 client.RfcTopic(source, topic + Seperator + addition);
             }
             return null; // we have no need to talk
+        }
+
+        string IPlugin.InvokeWithChannelUserChange(string channel, string user, string kicker, string message, ChannelUserChange type, ref IrcClient client)
+        {
+            return null; // Not implemented
+        }
+    }
+
+    public class Dns : IPlugin
+    {
+        string IPlugin.InvokeWithMessage(string source, string message, ref IrcClient client)
+        {
+            string toSend = String.Empty;
+            if (message.StartsWith(".dns "))
+            {
+                IPHostEntry ip = System.Net.Dns.GetHostEntry(message.Split(' ')[1]);
+                toSend = String.Format("Hostname: {0}; Addresses: {1}", ip.HostName, ip.AddressList.PrintEnumerable());
+            }
+            return toSend;
         }
 
         string IPlugin.InvokeWithChannelUserChange(string channel, string user, string kicker, string message, ChannelUserChange type, ref IrcClient client)
