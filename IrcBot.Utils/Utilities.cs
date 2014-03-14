@@ -139,7 +139,7 @@ namespace IrcBot.Utils
             {
                 string topic = client.GetChannel(source).Topic;
                 string addition = message.Split(' ')[1];
-                if (String.IsNullOrWhiteSpace(topic))
+                if (topic.IsNullOrWhitespace())
                 {
                     client.RfcTopic(source, addition);
                     return null;

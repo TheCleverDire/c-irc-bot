@@ -121,7 +121,7 @@ namespace IrcBot
                     {
                         // Why not spawn instances when we loaded them? Sometimes state likes to stick or something.
                         string to_send = ((IPlugin)Activator.CreateInstance(p)).InvokeWithMessage(source, message, ref i);
-                        if (!String.IsNullOrEmpty(message))
+                        if (!message.IsNullOrWhitespace())
                         {
                             i.SendMessage(SendType.Message, source, to_send);
                         }
@@ -153,7 +153,7 @@ namespace IrcBot
                     {
                         // Why not spawn instances when we loaded them? Sometimes state likes to stick or something.
                         string to_send = ((IPlugin)Activator.CreateInstance(p)).InvokeWithChannelUserChange(channel, user, kicker, message, type, ref i);
-                        if (!String.IsNullOrEmpty(message))
+                        if (!message.IsNullOrWhitespace())
                         {
                             i.SendMessage(SendType.Message, channel, to_send);
                         }
@@ -237,5 +237,27 @@ namespace IrcBot
 
             return printed;
         }
+
+        /// <summary>
+        /// An extension method version of String.IsNullOrEmpty.
+        /// </summary>
+        /// <param name="s">The string.</param>
+        /// <returns>If the string is null or empty.</returns>
+        public static bool IsNullOrEmpty(this string s)
+        {
+            return String.IsNullOrEmpty(s);
+        }
+
+        /// <summary>
+        /// An extension method version of String.IsNullOrWhiteSpace.
+        /// </summary>
+        /// <param name="s">The string.</param>
+        /// <returns>If the string is null, empty, or whitespace.</returns>
+        public static bool IsNullOrWhitespace(this string s)
+        {
+            return String.IsNullOrWhiteSpace(s);
+        }
+
+
     }
 }
