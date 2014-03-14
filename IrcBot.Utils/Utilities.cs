@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -154,6 +155,9 @@ namespace IrcBot.Utils
         }
     }
 
+    /// <summary>
+    /// Queries DNS information.
+    /// </summary>
     public class Dns : IPlugin
     {
         string IPlugin.InvokeWithMessage(string source, string message, ref IrcClient client)
@@ -163,6 +167,36 @@ namespace IrcBot.Utils
             {
                 IPHostEntry ip = System.Net.Dns.GetHostEntry(message.Split(' ')[1]);
                 toSend = String.Format("Hostname: {0}; Addresses: {1}", ip.HostName, ip.AddressList.PrintEnumerable());
+            }
+            return toSend;
+        }
+
+        string IPlugin.InvokeWithChannelUserChange(string channel, string user, string kicker, string message, ChannelUserChange type, ref IrcClient client)
+        {
+            return null; // Not implemented
+        }
+    }
+
+    /// <summary>
+    /// Pings a network machine.
+    /// </summary>
+    public class NetworkPing : IPlugin
+    {
+        string IPlugin.InvokeWithMessage(string source, string message, ref IrcClient client)
+        {
+            string toSend = String.Empty;
+            if (message.StartsWith(".ping "))
+            {
+                try
+                {
+                    PingReply pr = new System.Net.NetworkInformation.Ping().Send(message.Split(' ')[1]);
+                    return String.Format("{0} ({1}ms)", pr.Status, pr.RoundtripTime);
+                }
+                catch (PingException e)
+                {
+                    Debug.WriteLine(e.ToString(), "NetworkPingPlugin");
+                    return "Failure (PingException)";
+                }
             }
             return toSend;
         }
