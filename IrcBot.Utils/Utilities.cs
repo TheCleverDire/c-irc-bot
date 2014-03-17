@@ -75,7 +75,7 @@ namespace IrcBot.Utils
             }
             if (message.StartsWith(".dice "))
             {
-                return new Random().Next(1, Convert.ToInt32(message.Split(' ')[1])).ToString();
+                return new Random().Next(1, Convert.ToInt32(message.Split(new char[] { ' ' }, 2)[1])).ToString();
             }
 
             return null;
@@ -113,8 +113,9 @@ namespace IrcBot.Utils
         {
             if (message.StartsWith(".whois "))
             {
-                client.RfcWhois(message.Split(' ')[1]);
-                IrcUser u = client.GetIrcUser(message.Split(' ')[1]);
+                string user = message.Split(new char[] { ' ' }, 2)[1];
+                client.RfcWhois(user);
+                IrcUser u = client.GetIrcUser(user);
                 return String.Format("{0}!{1}@{2}, Away: {3}, Oper: {4}, Realname: {5}", u.Nick, u.Ident, u.Host, u.IsAway, u.IsIrcOp, u.Realname);
             }
             return null;
@@ -138,7 +139,7 @@ namespace IrcBot.Utils
             if (message.StartsWith(".appendtopic ") & source.StartsWith("#"))
             {
                 string topic = client.GetChannel(source).Topic;
-                string addition = message.Split(' ')[1];
+                string addition = message.Split(new char[] { ' ' }, 2)[1];
                 if (topic.IsNullOrWhitespace())
                 {
                     client.RfcTopic(source, addition);
@@ -165,7 +166,7 @@ namespace IrcBot.Utils
             string toSend = String.Empty;
             if (message.StartsWith(".dns "))
             {
-                IPHostEntry ip = System.Net.Dns.GetHostEntry(message.Split(' ')[1]);
+                IPHostEntry ip = System.Net.Dns.GetHostEntry(message.Split(new char[] { ' ' }, 2)[1]);
                 toSend = String.Format("Hostname: {0}; Addresses: {1}", ip.HostName, ip.AddressList.PrintEnumerable());
             }
             return toSend;
@@ -189,7 +190,7 @@ namespace IrcBot.Utils
             {
                 try
                 {
-                    PingReply pr = new System.Net.NetworkInformation.Ping().Send(message.Split(' ')[1]);
+                    PingReply pr = new System.Net.NetworkInformation.Ping().Send(message.Split(new char[] { ' ' }, 2)[1]);
                     return String.Format("{0} ({1}ms)", pr.Status, pr.RoundtripTime);
                 }
                 catch (PingException e)
