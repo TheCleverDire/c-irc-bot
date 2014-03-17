@@ -25,9 +25,13 @@ namespace IrcBot.Search
                 {
                     toSend = xd.SelectSingleNode("/DuckDuckGoResponse/Answer").InnerText;
                 }
-                if (!xd.SelectSingleNode("/DuckDuckGoResponse/Abstract").InnerText.IsNullOrWhitespace())
+                // dear diary, can I have my ?. operator soon?
+                if (xd.SelectSingleNode("/DuckDuckGoResponse/Abstract") != null)
                 {
-                    toSend = String.Format("{0} - {1}", xd.SelectSingleNode("/DuckDuckGoResponse/Abstract").InnerText, xd.SelectSingleNode("/DuckDuckGoResponse/AbstractURL").InnerText);
+                    if (!xd.SelectSingleNode("/DuckDuckGoResponse/Abstract").InnerText.IsNullOrWhitespace())
+                    {
+                        toSend = String.Format("{0} - {1}", xd.SelectSingleNode("/DuckDuckGoResponse/Abstract").InnerText, xd.SelectSingleNode("/DuckDuckGoResponse/AbstractURL").InnerText);
+                    }
                 }
             }
             return toSend;
@@ -38,7 +42,7 @@ namespace IrcBot.Search
             return null; // Not implemented
         }
 
-        string GetDDGApiUrl(string query)
+        static string GetDDGApiUrl(string query)
         {
             return String.Format("https://api.duckduckgo.com/?q={0}&format=xml&t=IrcBot.Search&no_redirect=1&no_html=1&skip_disambig=1", HttpUtility.UrlEncode(query));
         }
