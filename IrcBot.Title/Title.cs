@@ -25,13 +25,14 @@ namespace IrcBot.Title
             {
                 if (!(m.Value.StartsWith("http://") || m.Value.StartsWith("https://"))) continue; // boo unprefix
 
-                // Check if that's even an HTML file
-                WebRequest wr = WebRequest.Create(m.Value);
-                wr.Method = "HEAD";
-                string type = String.Empty;
                 try
                 {
-                    using (WebResponse wrr = wr.GetResponse()) {
+                    // Check if that's even an HTML file
+                    WebRequest wr = WebRequest.Create(m.Value);
+                    wr.Method = "HEAD";
+                    string type = String.Empty;
+                    using (WebResponse wrr = wr.GetResponse())
+                    {
                         Debug.WriteLine("Found type " + wrr.ContentType, "TitlePlugin");
                         type = wrr.ContentType;
                     }
@@ -44,6 +45,11 @@ namespace IrcBot.Title
                     }
                 }
                 catch (WebException e)
+                {
+                    Debug.WriteLine(e.ToString(), "TitlePlugin");
+                    return null; // we failed
+                }
+                catch (UriFormatException e)
                 {
                     Debug.WriteLine(e.ToString(), "TitlePlugin");
                     return null; // we failed
