@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Meebey.SmartIrc4net;
 using System.Xml;
-using System.Web;
 
 namespace IrcBot.Search
 {
@@ -44,7 +43,7 @@ namespace IrcBot.Search
 
         static string GetDDGApiUrl(string query)
         {
-            return String.Format("https://api.duckduckgo.com/?q={0}&format=xml&t=IrcBot.Search&no_redirect=1&no_html=1&skip_disambig=1", HttpUtility.UrlEncode(query));
+            return String.Format("https://api.duckduckgo.com/?q={0}&format=xml&t=IrcBot.Search&no_redirect=1&no_html=1&skip_disambig=1", Uri.EscapeUriString(query));
         }
     }
 }
