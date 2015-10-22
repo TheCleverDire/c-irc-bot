@@ -167,7 +167,7 @@ namespace IrcBot.Utils
             if (message.StartsWith(".dns "))
             {
                 IPHostEntry ip = System.Net.Dns.GetHostEntry(message.Split(new char[] { ' ' }, 2)[1]);
-                toSend = String.Format("Hostname: {0}; Addresses: {1}", ip.HostName, ip.AddressList.PrintEnumerable());
+                toSend = String.Format("Hostname: {0}; Addresses: {1}", ip.HostName, String.Join<IPAddress>(",", ip.AddressList));
             }
             return toSend;
         }
