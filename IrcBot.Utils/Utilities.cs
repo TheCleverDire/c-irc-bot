@@ -193,6 +193,11 @@ namespace IrcBot.Utils
                     PingReply pr = new System.Net.NetworkInformation.Ping().Send(message.Split(new char[] { ' ' }, 2)[1]);
                     return String.Format("{0} ({1}ms)", pr.Status, pr.RoundtripTime);
                 }
+                catch (ArgumentException e)
+                {
+                    Debug.WriteLine(e.ToString(), "NetworkPingPlugin");
+                    return "Failure (ArgumentException)";
+                }
                 catch (PingException e)
                 {
                     Debug.WriteLine(e.ToString(), "NetworkPingPlugin");
