@@ -27,7 +27,7 @@ namespace IrcBot.Search
                 // dear diary, can I have my ?. operator soon?
                 if (xd.SelectSingleNode("/DuckDuckGoResponse/Abstract") != null)
                 {
-                    if (!xd.SelectSingleNode("/DuckDuckGoResponse/Abstract").InnerText.IsNullOrWhitespace())
+                    if (!String.IsNullOrWhiteSpace(xd.SelectSingleNode("/DuckDuckGoResponse/Abstract").InnerText))
                     {
                         toSend = String.Format("{0} - {1}", xd.SelectSingleNode("/DuckDuckGoResponse/Abstract").InnerText, xd.SelectSingleNode("/DuckDuckGoResponse/AbstractURL").InnerText);
                     }

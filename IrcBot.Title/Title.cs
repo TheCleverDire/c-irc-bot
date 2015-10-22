@@ -55,7 +55,7 @@ namespace IrcBot.Title
                     return null; // we failed
                 }
             }
-            return !toSend.IsNullOrWhitespace() ? toSend : null;
+            return !String.IsNullOrWhiteSpace(toSend) ? toSend : null;
         }
 
         string IPlugin.InvokeWithChannelUserChange(string channel, string user, string kicker, string message, ChannelUserChange type, ref IrcClient client)

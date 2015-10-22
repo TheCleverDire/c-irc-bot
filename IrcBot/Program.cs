@@ -121,7 +121,7 @@ namespace IrcBot
                     {
                         // Why not spawn instances when we loaded them? Sometimes state likes to stick or something.
                         string to_send = ((IPlugin)Activator.CreateInstance(p)).InvokeWithMessage(source, message, ref i);
-                        if (!message.IsNullOrWhitespace())
+                        if (!String.IsNullOrWhiteSpace(message))
                         {
                             i.SendMessage(SendType.Message, source, to_send);
                         }
@@ -153,7 +153,7 @@ namespace IrcBot
                     {
                         // Why not spawn instances when we loaded them? Sometimes state likes to stick or something.
                         string to_send = ((IPlugin)Activator.CreateInstance(p)).InvokeWithChannelUserChange(channel, user, kicker, message, type, ref i);
-                        if (!message.IsNullOrWhitespace())
+                        if (!String.IsNullOrWhiteSpace(message))
                         {
                             i.SendMessage(SendType.Message, channel, to_send);
                         }
@@ -185,55 +185,5 @@ namespace IrcBot
         {
             return Assembly.LoadFrom(path);
         }
-    }
-
-    /// <summary>
-    /// Assorted utility functions, useful for plugins.
-    /// </summary>
-    public static class Utilities
-    {
-        /// <summary>
-        /// Prints an enumerable as a string representation of all the contained items.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="l">The enumerable to print.</param>
-        /// <param name="sep">The string seperator to use.</param>
-        /// <returns>A string representation of the enumerable.</returns>
-        public static string PrintEnumerable<T>(this IEnumerable<T> l, string sep)
-        {
-            string printed = String.Empty;
-
-            if (l.Count() != 0)
-            {
-                foreach (var i in l.Take(l.Count()))
-                {
-                    printed += (i.ToString() + sep);
-                }
-            }
-
-            return printed;
-        }
-
-        /// <summary>
-        /// An extension method version of String.IsNullOrEmpty.
-        /// </summary>
-        /// <param name="s">The string.</param>
-        /// <returns>If the string is null or empty.</returns>
-        public static bool IsNullOrEmpty(this string s)
-        {
-            return String.IsNullOrEmpty(s);
-        }
-
-        /// <summary>
-        /// An extension method version of String.IsNullOrWhiteSpace.
-        /// </summary>
-        /// <param name="s">The string.</param>
-        /// <returns>If the string is null, empty, or whitespace.</returns>
-        public static bool IsNullOrWhitespace(this string s)
-        {
-            return String.IsNullOrWhiteSpace(s);
-        }
-
-
     }
 }
